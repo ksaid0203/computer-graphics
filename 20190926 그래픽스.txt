@@ -1,0 +1,32 @@
+이식성 - portability
+
+portability가 없다면 제작사마다 표준이 달라서
+
+rendering 
+
+raster - primitive
+
+glbegin(primType);
+	
+glEnd();
+
+primType : GL_POINTS, GL_LINES, GL_TRIQANGLES, GL_QUADS,
+
+Embedded 에서는 다 버림
+
+pipeline -- 상태를 바꾼다?
+gl -
+glu -
+glut - utility
+
+[gl || glu || glut][Vertex || Color][# of component][type]
+fv - 2차원 vector
+alpha - 투명도
+
+interface가 없다?
+
+GLUT 가 지원하는 범위를 확인해야 한다?
+
+opengl은 oop가 아니다, procedure
+loop
+
