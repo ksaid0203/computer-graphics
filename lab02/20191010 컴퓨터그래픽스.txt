@@ -1,0 +1,39 @@
+메뉴 - glut 기능
+
+오늘 배우는 것 - 인터페이스, 메뉴, 이벤트핸들러, 카메라가 움직이는 샘플
+
+opengl과 다른 패키지와 호환하는 인터페이스
+
+Transformation
+Rigid body - 모양 불변
+
+Similarity - 균등 크기조절 변환, 반사 변환
+
+* GL 파이프라인
+
+어디서 보냐에 따라 모양이 다름
+
+모델view matrix
+gluLookAt() -
+gl 까탈스럽
+glu 기능을 모아서 편리하게?
+
+glMatrixMode - 
+현재내가 구동하는 행렬
+
+gl은 not OOP, procedure
+상태변수가 변해간다, 이를 matrix로 표현
+
+단위행렬 Identity로 초기화
+
+함수호출과 연산순서는 역관계
+
+stack을 이용한다?
+현재쓰던거를 stack에 저장
+
+View volume
+있는 그대로 보이기 - ortho
+- Frustum
+gl은 좌표를 다 지정해야한다
+
+gluPerspective -
