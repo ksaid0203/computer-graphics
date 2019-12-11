@@ -1,0 +1,21 @@
+particle -- 
+
+camera, light, 별도의 package로 구성해서 background로 작업.
+하나하나 제어해야하지만 이해하기 심플해짐?
+
+particle engine
+method를 변경하거나 추가 가능
+
+particle.py --- cdraw() color
+setMass() --- 
+
+collision : 부딪히면 뚧고 나가지 않게
+
+1) 공이 바닥에 닿으면 다시 튀어오르게
+2) particle이 튀어오르게, 10개 정도, 분수처럼 , 랜덤하게 어느 각도로 
+
+opencv 쓰냐?
+img = cv2.imread('filename') 하면 이 자체가 np.array 아니가?
+
+server - client : traffic -- 
+lambda -- ㅈㄴ 가볍다
