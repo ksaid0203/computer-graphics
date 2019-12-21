@@ -11,36 +11,69 @@ class Teapot(Particle) :
 
     def __init__(self):
         self.loc = np.array([2.5,0.,2.5])
+        self.lid = np.array([2.5,1.,2.5])
         self.vel = np.array([0.,0.,0.])
         self.radius = 1.0
         self.mass = 1.0
         self.force = np.array([0., 0., 0.])
         self.gravity = np.array([0., -9.8, 0.])
         self.colPlane = np.array([0., 1., 0., 0.])
+        self.nn = np.array([0., 1., 0.])
         self.Flag = False
+
         return
 
+    def rotateT(self, angle, u) :
+        # u라는 축에 대해서 angle만큼 반시계 방향으로 회전했을 때
+        # normal vector및 lid 위치 계산
+        angle = angle / (2 * math.pi)
+
+        dist = np.linalg.norm(u)
+        u = u / dist
+        R = np.array(
+            [
+                [
+                    math.cos(angle) + u[0] * u[0] * (1.0 - math.cos(angle)) , 
+                    u[0] * u[1] * (1.0 - math.cos(angle) ) - u[2] * math.sin(angle),
+                    u[0] * u[2] * (1.0 - math.cos(angle) ) + u[1] * math.sin(angle)
+                ],
+                
+                [
+                    u[1] * u[0] * (1.0 - math.cos(angle) ) + u[2] * math.sin(angle) ,
+                    math.cos(angle) + u[1] * u[1] * (1.0 - math.cos(angle) ),
+                    u[1] * u[2] * (1.0 - math.cos(angle) ) - u[0] * math.sin(angle)
+                ],
+                
+                [
+                    u[2] * u[0] * (1.0 - math.cos(angle) ) - u[1] * math.sin(angle),
+                    u[2] * u[1] * (1.0 - math.cos(angle) ) + u[0] * math.sin(angle),
+                    math.cos(angle) + u[0] * u[0] * (1.0 - math.cos(angle) )
+                ]
+            ]
+        )
+
+        self.nn = np.transpose(np.dot(R, np.transpose(self.nn) ) )
+        self.lid = np.transpose( np.dot(R, np.transpose(self.lid) ) )
     def isSkewed(self) :
-        return
+        # 주전자의 normal과 그리드 normal각도가 90도 이상 벌어지면 기울어 졌다고 하자.
+        self.Flag = sum( self.nn * np.array([0., 1., 0.]) ) <= 0.0
+        return self.Flag
+
     def draw(self) :
         glPushMatrix()
+        glRotatef(90.0, 1.0, 0.0, 0.0)
         glTranslatef(self.loc[0], self.loc[1], self.loc[2])
         glutSolidTeapot(0.5)
         glPopMatrix()
+
     def drawC(self) :
         glPushMatrix()
-        glTranslatef(self.loc[0], self.loc[1], self.loc[2])
-        glRotated(90.0, 1.0, 0.0, 0.0)
+        #glTranslatef(self.loc[0], self.loc[1], self.loc[2])
+
         quad = gluNewQuadric()
         gluCylinder(quad, 1.0, 2.0, 2.0, 3, 3)
         #glutSolidTorus(1.0, 0.5, 3, 3)
         glPopMatrix()
-
-    #def draw(self):
-    #    glPushMatrix()
-    #    glTranslatef(self.loc[0], self.loc[1], self.loc[2])
-    #    glutSolidSphere(self.radius, 20, 20)
-    #    glPopMatrix()
 
     def cdraw(self, color):
         glPushMatrix()
