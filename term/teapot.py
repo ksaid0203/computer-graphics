@@ -151,6 +151,7 @@ class Teapot(Particle) :
             # 플래그를 하나 더 줌
             if type(other).name == 'Hand' :
                 self.hand = True
+                return
 
             penetration = R - dist
             l0 += (0.5+0.5*e)*penetration * N
