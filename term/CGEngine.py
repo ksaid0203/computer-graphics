@@ -39,15 +39,17 @@ class Graphics:
 
 class Loading(object):
     def __init__(self, w, h, title):
+        self.KeyInputState={"reset":False ,"space":False,"b":False ,"v":False ,"g":False,"h":False,"n":False}
         self.cam = Camera(60., 1.0, 0.1, 1000.0)
+        #self.cam.setPos([0,10,1], [0,0,0])
         #self.cam.setPos([10,10,10], [0,0,0])
         #self.cam.setPos([10,5,10], [0,0,0])
-        self.cam.setPos([10,2,10], [0,0,0])
+        #self.cam.setPos([10,2,10], [0,0,0])
+        self.cam.setPos([30,20,10], [0,0,0])
         self.timer = Timer()
         self.gridMode = False
         self.gridAngle = 0
         self.gridAxis = [1,0,0]
-
         self.graphics = Graphics()
         self.lighting = Lighting()
         self.scene = Scene()

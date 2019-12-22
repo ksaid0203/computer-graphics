@@ -15,7 +15,7 @@ class Particle :
         self.mass = 1.0
         self.force = np.array([0., 0., 0.])
         self.gravity = np.array([0., 0., 0.])
-        self.colPlane = None #np.array([0., 1., 0., 0.])
+        self.colPlane = np.array([0., 1., 0., 0.])
 
         return
     
