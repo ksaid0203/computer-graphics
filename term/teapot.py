@@ -10,8 +10,10 @@ from Particle import *
 class Teapot(Particle) :
 
     def __init__(self):
-        self.loc = np.array([2.5,0.,2.5])
-        self.lid = np.array([2.5,1.,2.5])
+        #self.loc = np.array([1.0,0.,1.0])
+        #self.lid = np.array([1.5,0.5,0.0])
+        self.loc = np.array([9.0,0.,0.0])
+        self.lid = np.array([9.5,0.5,0.0])
         self.vel = np.array([0.,0.,0.])
         self.radius = 1.0
         self.mass = 1.0
@@ -21,8 +23,9 @@ class Teapot(Particle) :
         self.nn = np.array([0., 1., 0.])
         self.axis = np.array([0., 1., 0.])
 
+        self.angle = 0.0
         self.Flag = False # 현재 기울어진 여부 확인
-        self.hand = False # 손과의 연동 여부 체크
+        self.hand = True # 손과의 연동 여부 체크
         return
 
     def rotateT(self, angle, u) :
@@ -32,6 +35,8 @@ class Teapot(Particle) :
 
         dist = np.linalg.norm(u)
         u = u / dist
+        lid = self.lid - self.loc
+
         R = np.array(
             [
                 [
@@ -53,10 +58,8 @@ class Teapot(Particle) :
                 ]
             ]
         )
-
         self.nn = np.transpose(np.dot(R, np.transpose(self.nn) ) )
-        self.lid = np.transpose( np.dot(R, np.transpose(self.lid) ) )
-
+        self.lid = self.loc + np.transpose( np.dot(R, np.transpose(lid) ) )
     def isSkewed(self) :
         # 주전자의 normal과 그리드 normal각도가 90도 이상 벌어지면 기울어 졌다고 하자.
         self.Flag = sum( self.nn * np.array([0., 1., 0.]) ) <= 0.0
@@ -65,9 +68,11 @@ class Teapot(Particle) :
     def draw(self, angle) :
         glPushMatrix()
         glTranslatef(self.loc[0], self.loc[1], self.loc[2])
-        glRotatef(angle, self.axis[0], self.axis[1], self.axis[2])
+        if self.hand :
+            self.angle += angle * 20
+
+        glRotatef(self.angle, self.axis[0], self.axis[1], self.axis[2])
         glutSolidTeapot(1.0)
-        self.rotateT(angle, self.axis)
         glPopMatrix()
 
     def cdraw(self, color):
@@ -127,8 +132,14 @@ class Teapot(Particle) :
         return force
 
     def zeroBean(self, other) :
-        if other.isTouched(self) > 0 : # 손과 teapot이 충돌 했나?
+        #if other.isTouched(self) > 0 : # 손과 teapot이 충돌 했나?
+        ret = rp.random()
+        if ret < 0.01 : # 손과 teapot이 충돌 했나?
             self.axis = np.array([ rp.random(), rp.random(), rp.random() ])
+            self.vel[2] += 2.5
+            #if self.hand == False :
+            #    self.loc[2] += 2.0
+            self.hand = True
 
     def colHandlePair(self, other):
         l0 = self.loc
@@ -148,12 +159,6 @@ class Teapot(Particle) :
         e = 0.1;
 
         if dist < R : # collision
-            # 만약 충돌 상대가 손이면 손과 움직이게 할 수 있게
-            # 플래그를 하나 더 줌
-            if type(other).name == 'Hand' :
-                self.hand = True
-                return
-
             penetration = R - dist
             l0 += (0.5+0.5*e)*penetration * N
             l1 -= (0.5+0.5*e)*penetration * N

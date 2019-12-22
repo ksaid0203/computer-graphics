@@ -45,7 +45,7 @@ class Loading(object):
         #self.cam.setPos([10,10,10], [0,0,0])
         #self.cam.setPos([10,5,10], [0,0,0])
         #self.cam.setPos([10,2,10], [0,0,0])
-        self.cam.setPos([30,20,10], [0,0,0])
+        self.cam.setPos([20,10,10], [0,0,0])
         self.timer = Timer()
         self.gridMode = False
         self.gridAngle = 0

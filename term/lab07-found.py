@@ -37,6 +37,7 @@ class mySim(CGEngine.Loading) :
 
     def initObjects(self):
         root2 = math.sqrt(2.0)
+
         for i in range(n) :
             ll = np.array([0.0, 7.0, 0.0])
             vv = np.array([0.0, 0.0, 0.0])
@@ -66,6 +67,8 @@ class mySim(CGEngine.Loading) :
         print(self.teapot.isSkewed())
         for p in self.particle :
             p.cdraw([0.0,0.0,1.0,1.0])
+
+        self.teapot.colHandlePair(self.cup)
 
         super(mySim,self).afterFrame()
 
