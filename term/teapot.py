@@ -19,8 +19,8 @@ class Teapot(Particle) :
         self.gravity = np.array([0., -9.8, 0.])
         self.colPlane = np.array([0., 1., 0., 0.])
         self.nn = np.array([0., 1., 0.])
-        self.Flag = False
-
+        self.Flag = False # 현재 기울어진 여부 확인
+        self.hand = False # 손과의 연동 여부 체크
         return
 
     def rotateT(self, angle, u) :
@@ -147,6 +147,11 @@ class Teapot(Particle) :
         e = 0.1;
 
         if dist < R : # collision
+            # 만약 충돌 상대가 손이면 손과 움직이게 할 수 있게
+            # 플래그를 하나 더 줌
+            if type(other).name == 'Hand' :
+                self.hand = True
+
             penetration = R - dist
             l0 += (0.5+0.5*e)*penetration * N
             l1 -= (0.5+0.5*e)*penetration * N
@@ -165,7 +170,7 @@ class Teapot(Particle) :
 
                 self.vel = self.vel - vp0 * N + v0new * N
                 other.vel = other.vel - vp1 * N + v1new * N
-
+            
     def colHandle(self):
 
         if self.colPlane is None :
