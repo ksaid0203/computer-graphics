@@ -2,13 +2,13 @@ from OpenGL.GLUT import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-
 import random
 import numpy as np
 import math
 
 import Particle
 import CGEngine
+import teapot
 
 n = 400
 
@@ -26,22 +26,20 @@ class mySim(CGEngine.Loading) :
             #self.particle.append(Particle.Particle())
             self.steam.append(Particle.Particle())
 
+        self.theta = 0.0
+        self.teapot = teapot.Teapot()
         self.initObjects()
-
 
     def initObjects(self):
         root2 = math.sqrt(2.0)
         for i in range(n) :
-            ll = np.array([0.1, 0.1, 0.1])
             vv = np.array([myRand(-2, 3), myRand(2,11), myRand(-2, 3)])
-            self.steam[i].set(ll, vv)
+            self.steam[i].set(self.teapot.lid, vv)
 
             self.steam[i].setRadius(0.04)
             self.steam[i].setGravity(np.array([0., 2.0, 0.]))
 
         return
-
-
 
     def frame(self):
         dt = self.getDt()
@@ -51,14 +49,15 @@ class mySim(CGEngine.Loading) :
         for p in self.steam :
             p.simulate(dt)
             if p.loc[1] >= 6 :
-                ll = np.array([0.1, 0.1, 0.1])
+                ll = self.teapot.lid
                 vv = np.array([myRand(-2, 2), myRand(2,11), myRand(-2, 2)])
                 p.loc = ll
                 p.vel = vv
-            p.colHandle()
+            #p.colHandle()
 
-        glutSolidTeapot(1.0)
-
+        self.teapot.draw(self.theta)
+        self.theta += 0.1
+        #self.teapot.rotateR(theta)
         for p in self.particle :
             p.cdraw([0.0,0.0,1.0,1.0])
         for p in self.steam :

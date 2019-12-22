@@ -2,7 +2,7 @@ from OpenGL.GLUT import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-import random
+import random as rp
 import math
 import numpy as np
 from Particle import *
@@ -19,6 +19,8 @@ class Teapot(Particle) :
         self.gravity = np.array([0., -9.8, 0.])
         self.colPlane = np.array([0., 1., 0., 0.])
         self.nn = np.array([0., 1., 0.])
+        self.axis = np.array([0., 1., 0.])
+
         self.Flag = False # 현재 기울어진 여부 확인
         self.hand = False # 손과의 연동 여부 체크
         return
@@ -54,25 +56,18 @@ class Teapot(Particle) :
 
         self.nn = np.transpose(np.dot(R, np.transpose(self.nn) ) )
         self.lid = np.transpose( np.dot(R, np.transpose(self.lid) ) )
+
     def isSkewed(self) :
         # 주전자의 normal과 그리드 normal각도가 90도 이상 벌어지면 기울어 졌다고 하자.
         self.Flag = sum( self.nn * np.array([0., 1., 0.]) ) <= 0.0
         return self.Flag
 
-    def draw(self) :
+    def draw(self, angle) :
         glPushMatrix()
-        glRotatef(90.0, 1.0, 0.0, 0.0)
         glTranslatef(self.loc[0], self.loc[1], self.loc[2])
-        glutSolidTeapot(0.5)
-        glPopMatrix()
-
-    def drawC(self) :
-        glPushMatrix()
-        #glTranslatef(self.loc[0], self.loc[1], self.loc[2])
-
-        quad = gluNewQuadric()
-        gluCylinder(quad, 1.0, 2.0, 2.0, 3, 3)
-        #glutSolidTorus(1.0, 0.5, 3, 3)
+        glRotatef(angle, self.axis[0], self.axis[1], self.axis[2])
+        glutSolidTeapot(1.0)
+        self.rotateT(angle, self.axis)
         glPopMatrix()
 
     def cdraw(self, color):
@@ -94,6 +89,7 @@ class Teapot(Particle) :
             self.colPlane[1] = N[1]
             self.colPlane[2] = N[2]
             self.colPlane[3] = d
+    
     def setColPlaneNone(self) :
         self.colPlane = None
     def setRadius(self, r):
@@ -114,9 +110,10 @@ class Teapot(Particle) :
 
     def simulate(self, dt):
         acc = self.gravity + self.force / self.mass
-        self.vel = self.vel + acc*dt
-            
+        self.vel = self.vel + acc*dt 
         self.loc = self.loc + self.vel*dt
+        self.lid = self.lid + self.vel*dt
+    
     def computeForce(self, other):
         l0 = self.loc
         l1 = other.loc
@@ -128,6 +125,10 @@ class Teapot(Particle) :
         G = 40.5
         force = (G * m1*m0 / (r**2.0)) *dir
         return force
+
+    def zeroBean(self, other) :
+        if other.isTouched(self) > 0 : # 손과 teapot이 충돌 했나?
+            self.axis = np.array([ rp.random(), rp.random(), rp.random() ])
 
     def colHandlePair(self, other):
         l0 = self.loc
