@@ -7,7 +7,10 @@ import math
 import numpy as np
 #import Animator
 import Particle
-
+'''
+@Author : 김영빈
+@description : 손에 대해 정의
+'''
 
 class Hand(Particle.Particle):
     def __init__(self, rootJoint ):

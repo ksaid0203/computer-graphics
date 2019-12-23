@@ -1,4 +1,8 @@
 import numpy as np
+'''
+@Author : 김영빈
+@description : 관절에 대해 정의
+'''
 
 class Joint:
     def __init__(self,index , name, localBindTransform,originLocation ):

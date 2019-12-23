@@ -30,13 +30,7 @@ class Cup(Particle) :
         glRotated(90.0, 1.0, 0.0, 0.0)
         quad = gluNewQuadric()
         gluCylinder(quad, 1.0, 1.0, 2.0, 26, 26)
-        #glutSolidTorus(1.0, 0.5, 3, 3)
         glPopMatrix()
-    #def draw(self):
-    #    glPushMatrix()
-    #    glTranslatef(self.loc[0], self.loc[1], self.loc[2])
-    #    glutSolidSphere(self.radius, 20, 20)
-    #    glPopMatrix()
 
     def cdraw(self, color):
         glPushMatrix()

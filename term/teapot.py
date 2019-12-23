@@ -1,7 +1,11 @@
 from OpenGL.GLUT import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
-
+'''
+    @Author : 김주호
+    @description : 주전자 객체
+       Particle을 상속받았다.
+'''
 import random as rp
 import math
 import numpy as np
@@ -10,8 +14,6 @@ from Particle import *
 class Teapot(Particle) :
 
     def __init__(self):
-        #self.loc = np.array([1.0,0.,1.0])
-        #self.lid = np.array([1.5,0.5,0.0])
         self.loc = np.array([9.0,0.,0.0])
         self.lid = np.array([9.5,0.5,0.0])
         self.vel = np.array([0.,0.,0.])
@@ -60,11 +62,16 @@ class Teapot(Particle) :
         )
         self.nn = np.transpose(np.dot(R, np.transpose(self.nn) ) )
         self.lid = self.loc + np.transpose( np.dot(R, np.transpose(lid) ) )
+    '''
+        주전자의 normal과 그리드 normal각도가 90도 이상 벌어지면 기울어 졌다고 하자.
+    '''
     def isSkewed(self) :
-        # 주전자의 normal과 그리드 normal각도가 90도 이상 벌어지면 기울어 졌다고 하자.
         self.Flag = sum( self.nn * np.array([0., 1., 0.]) ) <= 0.0
         return self.Flag
 
+    '''
+        function overrided
+    '''
     def draw(self, angle) :
         glPushMatrix()
         glTranslatef(self.loc[0], self.loc[1], self.loc[2])
@@ -130,16 +137,16 @@ class Teapot(Particle) :
         G = 40.5
         force = (G * m1*m0 / (r**2.0)) *dir
         return force
-
+    '''
+    손이 teapot과 충돌한 후 처리에 관한 함수
+    '''
     def zeroBean(self, other) :
         #if other.isTouched(self) > 0 : # 손과 teapot이 충돌 했나?
-        #ret = rp.random()
-        #if ret < 0.01 : # 손과 teapot이 충돌 했나?
-        if self.hand:
-            self.axis = np.array([ rp.random(), rp.random(), rp.random() ])
+        ret = rp.random()
+        if ret < 0.01 : # 손과 teapot이 충돌 했나?
+        #if self.hand:
+            self.axis = np.array([ rp.random(), rp.random(), rp.random() ]) # 무작위 축
             self.vel[2] += 2.5
-            #if self.hand == False :
-            #    self.loc[2] += 2.0
             self.hand = True
 
     def colHandlePair(self, other):

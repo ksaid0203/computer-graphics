@@ -108,7 +108,6 @@ class mySim(CGEngine.Loading) :
         self.teapot.hand = False
         self.initObjects()
         self.setBackground(b"bg_cosmos.jpg")
-        #self.background = [b"bg_cosmos.jpg"]
 
     def initObjects(self):
         global n , nn
@@ -125,12 +124,6 @@ class mySim(CGEngine.Loading) :
             self.particle[i].set(self.teapot.lid, vv)
             self.particle[i].setRadius(0.2)
             self.particle[i].setGravity(np.array([0., -9.8, 0.]))
-        #for i in range(self.nParticle) :
-        #    l = np.array([myRand(-0.3,0.3),0.001, myRand(-0.3,0.3)])
-        #    v = np.array([myRand(-self.particleVel,self.particleVel),myRand(6,7),myRand(-self.particleVel,self.particleVel)])
-        #    self.particle[i].set(l,v)
-        #    self.particle[i].setRadius(self.particleRadius)
-        #    self.particle[i].setGravity(np.array([0., -9.8, 0.]))
 
         return
 
@@ -139,46 +132,17 @@ class mySim(CGEngine.Loading) :
     def frame(self):
         global backCount, handState
         dt = self.getDt()
-        #dt*=10
 
         super(mySim,self).frame()
-        #self.teapot.colHandlePair(Hand)
         self.teapot.zeroBean(Hand)
-        self.teapot.hand = handState
+        #self.teapot.hand = handState
         self.teapot.draw(theta)
         if self.teapot.hand :
             self.teapot.rotateT(theta, self.teapot.axis)
             
         newCurTime = time.time()
-        #print(newCurTime-self.curTime)
-        # if newCurTime - self.curTime > random.random() / 1000.0:
-        #     self.curTime = newCurTime
-        #     self.particle.append(Particle.Particle())
-        #     self.collisionCnt.append(0)
-        #
-        #     l = np.array([myRand(-0.1,0.1), 0.001, myRand(-0.1,0.1)])
-        #     v = np.array([myRand(-self.particleVel, self.particleVel), myRand(8,9), myRand(-self.particleVel, self.particleVel)])
-        #     self.particle[-1].set(l, v)
-        #     self.particle[-1].setRadius(self.particleRadius)
-        #     self.particle[-1].setGravity(np.array([0., -9.8, 0.]))
 
-
-        #for idx , p in enumerate(self.particle):
-        #    if idx <3 :break
-        #    p.simulate(dt)
-        #    if p.loc[1] < 0 :
-        #        p.vel[1] = - p.vel[1] / 1.7
-        #        self.collisionCnt[idx] = self.collisionCnt[idx] + 1
-            #p.colHandle()
-        #print(self.particle[0].vel)
         maxCollision = 4
-        #self.particle = [ item for item,cnt in zip(self.particle,self.collisionCnt) if cnt < maxCollision ]
-        #self.collisionCnt= [ cnt for cnt in self.collisionCnt if cnt < maxCollision]
-        #(len(self.particle))
-        #self.nParticle = len(self.particle)
-        #for i in range(self.nParticle) :
-        #    for j in range(i+1, self.nParticle) :
-        #        self.particle[i].colHandlePair(self.particle[j])
 
         for p in self.steam :
             p.simulate(dt)
@@ -193,7 +157,6 @@ class mySim(CGEngine.Loading) :
                 p.loc = self.teapot.lid
             if p.loc[1] < 0.04 :
                 ll = self.teapot.lid
-                #vv = np.array([0.0 ,0.0, 0.0])
                 vv = np.array([myRand(-2, 2), myRand(2,11), myRand(-2, 2)])
                 p.loc = ll
                 p.vel = vv
@@ -218,13 +181,6 @@ class mySim(CGEngine.Loading) :
         glPopMatrix()
         print(Hand.rootJoint.getCurAnimatedLocationCOG() , ' is COG of RottJoint')
         print(self.KeyInputState)
-        # cubeOrder = ((0, 1, 2, 3), (1, 2, 6, 5), (2, 3, 7, 6), (0, 1, 5, 4), (0, 3, 2, 4), (4, 7, 6, 5))
-        # vertices = makeCubeInfo(0,0,-2,5,2,2)
-        # solidCube(vertices,cubeOrder)
-        # glBegin(GL_QUADS)
-        # for i in range(4):
-        #     glVertex3f(vertices[i][0],vertices[i][1],vertices[i][2])
-        # glEnd()
         super(mySim,self).afterFrame()
 
 ani = mySim(500,500, b"Lab07-3:found")
@@ -235,10 +191,6 @@ def key(k, x, y) :
     global Hand,upCnt,downCnt,leftCnt, rightCnt, handState
     if k == b' ':
         ani.KeyInputState['space'] = True
-    #    if ani.timer.timerRunning:
-    #        ani.timerStop()
-    #    else:
-    #        ani.timerStart()
     else :
         ani.KeyInputState['space'] = False
     if k == b'r':
@@ -284,8 +236,6 @@ def key(k, x, y) :
         rightCnt += 1
     if k == b's':
         downCnt += 1
-    if k == b'z':
-        handState = True
 def draw():
     ani.frame()
 ani.initObjects()
