@@ -78,6 +78,7 @@ print(jointSpaceRoot)
 
 # print(2)
 backCount = 0
+handState = False
 
 cubeOrder = ((0,1,2,3),(1,2,6,5),(2,3,7,6),(0,1,5,4),(0,3,2,4),(4,7,6,5))
 def myRand(start, end) :
@@ -136,13 +137,14 @@ class mySim(CGEngine.Loading) :
 
 
     def frame(self):
-        global backCount
+        global backCount, handState
         dt = self.getDt()
         #dt*=10
 
         super(mySim,self).frame()
         #self.teapot.colHandlePair(Hand)
         self.teapot.zeroBean(Hand)
+        self.teapot.hand = handState
         self.teapot.draw(theta)
         if self.teapot.hand :
             self.teapot.rotateT(theta, self.teapot.axis)
@@ -230,7 +232,7 @@ ani.grid(False)
 ani.timerStart()
 
 def key(k, x, y) :
-    global Hand,upCnt,downCnt,leftCnt, rightCnt
+    global Hand,upCnt,downCnt,leftCnt, rightCnt, handState
     if k == b' ':
         ani.KeyInputState['space'] = True
     #    if ani.timer.timerRunning:
@@ -282,7 +284,8 @@ def key(k, x, y) :
         rightCnt += 1
     if k == b's':
         downCnt += 1
-
+    if k == b'z':
+        handState = True
 def draw():
     ani.frame()
 ani.initObjects()

@@ -133,8 +133,9 @@ class Teapot(Particle) :
 
     def zeroBean(self, other) :
         #if other.isTouched(self) > 0 : # 손과 teapot이 충돌 했나?
-        ret = rp.random()
-        if ret < 0.01 : # 손과 teapot이 충돌 했나?
+        #ret = rp.random()
+        #if ret < 0.01 : # 손과 teapot이 충돌 했나?
+        if self.hand:
             self.axis = np.array([ rp.random(), rp.random(), rp.random() ])
             self.vel[2] += 2.5
             #if self.hand == False :
